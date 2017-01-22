@@ -1,4 +1,3 @@
 # concourse
 
-TODO: Enter the cookbook description here.
-
+A Resource Cookbook for installing and configuring the components of Concourse CI.
