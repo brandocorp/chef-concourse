@@ -1,0 +1,17 @@
+[Unit]
+Description=Concourse CI Web
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/concourse web \
+  --basic-auth-username admin \
+  --basic-auth-password password \
+  --session-signing-key /etc/concourse/keys/session_signing_key \
+  --tsa-host-key /etc/concourse/keys/host_key \
+  --tsa-authorized-keys /etc/concourse/keys/authorized_worker_keys \
+  --external-url http://<%= node['ipaddress'] %>
+
+[Install]
+WantedBy=multi-user.target
