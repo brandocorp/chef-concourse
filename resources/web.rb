@@ -6,20 +6,19 @@ property :session_signing_key, String, required: true
 property :tsa_host_key, String, required: true
 property :tsa_authorized_keys, String, required: true
 property :postgres_data_source, String
+property :download_location, String, default: ""
 
 action :install do
   remote_file "/usr/local/bin/concourse" do
-    source "https://github.com/concourse/concourse/releases/download/v#{version}/concourse_linux_amd64"
+    if download_location.empty?
+      source "https://github.com/concourse/concourse/releases/download/v#{version}/concourse_linux_amd64"
+    else
+      source download_location
+    end
     mode '755'
   end
 
   poise_service_user service_account
-
-  directory '/etc/concourse' do
-    owner service_account
-    group service_account
-    mode '755'
-  end
 
   [tsa_host_key, session_signing_key, tsa_authorized_keys].each do |config|
     file config do
